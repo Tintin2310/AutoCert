@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Confirmed</title>
+    <style>
+        /* Background with Image */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url("/static/background.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Top Bar for Logo & Logout */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+            z-index: 1000;
+        }
+
+        /* Logo */
+        .logo {
+            width: 200px;  /* Increased size */
+            height: auto;
+        }
+
+        /* Logout Button */
+        .logout-button {
+            background-color: #B50346;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #900235;
+            transform: scale(1.05);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 700px;
+            width: 90%;
+            background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent */
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        /* Header */
+        h2 {
+            color: #ffffff;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        /* Paragraph */
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Confirm Button */
+        .confirm-button {
+            display: inline-block;
+            padding: 14px 25px;
+            background-color: #B50346;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .confirm-button:hover {
+            background-color: #900235;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar for Logo & Logout -->
+    <div class="top-bar">
+        <img src="/static/logo.png" alt="Logo" class="logo">
+        {% if session.user %}
+        <form action="/logout" method="post">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <!-- Confirmation Message Container -->
+    <div class="container">
+        <h2>Certificate Confirmed</h2>
+        <p>Your certificate has been added to the database and sent to the admin for review.</p>
+        <a href="/" class="confirm-button">Go Home</a>
+    </div>
+
+</body>
+</html>

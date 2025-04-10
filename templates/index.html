@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        /* Keep the existing background */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url("static/background.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Top bar container */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        /* Logo styling */
+        .logo {
+            width: 160px; /* Increased size */
+            height: auto;
+        }
+
+        /* Logout button */
+        .logout-button {
+            background-color: #B50346;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 14px 22px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #900235;
+            transform: scale(1.05);
+        }
+
+        /* Main container */
+        .container {
+            max-width: 900px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+            border-radius: 8px;
+            padding: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            margin-top: 80px; /* Adjusted for top bar */
+        }
+
+        /* Apply the new color scheme inside the container */
+        h2, h3 {
+            color: #B50346;
+        }
+
+        /* File upload styling */
+        .file-upload-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .custom-file-input {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #e9ecef;
+            border: 2px solid #B50346;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .custom-file-input:hover {
+            border-color: #900235;
+        }
+
+        .file-name {
+            margin-left: 15px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        /* Upload button */
+        .upload-button {
+            padding: 12px 25px;
+            background-color: #B50346;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .upload-button:hover {
+            background-color: #900235;
+            transform: scale(1.05);
+        }
+
+        /* Authentication links */
+        .auth-links {
+            text-align: left;
+            margin-top: 25px;
+        }
+
+        .auth-links a {
+            color: #B50346;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fixed top bar with logo & logout -->
+    <div class="top-bar">
+        <img src="static/logo.png" alt="Logo" class="logo">
+        {% if session.user %}
+            <form action="/logout" method="post">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        {% if session.user %}
+            <h2>Welcome, {{ session.user.name }}!</h2>
+
+            <div class="upload-section">
+                <h3>Upload Your Certificate</h3>
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="file-upload-wrapper">
+                        <input type="file" name="file" id="fileInput" required>
+                        <label for="fileInput" class="custom-file-input">Choose File</label>
+                        <span class="file-name" id="fileName">No file chosen</span>
+                    </div>
+                    <button type="submit" class="upload-button">Upload Certificate</button>
+                </form>
+            </div>
+        {% else %}
+            <h2>Welcome, Guest!</h2>
+            <div class="auth-links">
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Show selected file name
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+            document.getElementById('fileName').textContent = fileName;
+        });
+    </script>
+
+</body>
+</html>

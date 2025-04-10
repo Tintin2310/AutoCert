@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Certificates</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0d1b2a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            background: #1b2631;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        h2 {
+            color: #00bcd4;
+            margin-bottom: 10px;
+        }
+
+        .filter-container {
+            margin-bottom: 15px;
+        }
+
+        .filter-container input {
+            padding: 8px;
+            margin: 5px;
+            width: 200px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background: #2a2d34;
+            color: #ffffff;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #2a2d34;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #444;
+            text-align: left;
+        }
+
+        th {
+            background-color: #00bcd4;
+            color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background: #22252b;
+        }
+
+        img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 4px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+        }
+
+        a {
+            color: #00bcd4;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Uploaded Certificates</h2>
+
+        <div class="filter-container">
+            <input type="text" id="nameFilter" placeholder="Filter by Name">
+            <input type="text" id="eventFilter" placeholder="Filter by Event">
+            <input type="text" id="rankFilter" placeholder="Filter by Rank">
+            <input type="text" id="typeFilter" placeholder="Filter by Type">
+        </div>
+
+        <div class="table-container">
+            {% if certificates %}
+                <table id="certificateTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Event</th>
+                            <th>Rank/Position</th>
+                            <th>Type</th>
+                            <th>Certificate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cert in certificates %}
+                        <tr>
+                            <td>{{ cert["Name"] }}</td>
+                            <td>{{ cert["Event"] }}</td>
+                            <td>{{ cert["Rank/Position"] }}</td>
+                            <td>{{ cert["Type"] }}</td>
+                            <td><img src="{{ cert['Image_URL'] }}" alt="Certificate Image"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No certificates uploaded yet.</p>
+            {% endif %}
+        </div>
+
+        <br>
+        <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const nameFilter = document.getElementById("nameFilter");
+            const eventFilter = document.getElementById("eventFilter");
+            const rankFilter = document.getElementById("rankFilter");
+            const typeFilter = document.getElementById("typeFilter");
+            const table = document.getElementById("certificateTable");
+            const rows = table.getElementsByTagName("tr");
+
+            function filterTable() {
+                const nameValue = nameFilter.value.toLowerCase();
+                const eventValue = eventFilter.value.toLowerCase();
+                const rankValue = rankFilter.value.toLowerCase();
+                const typeValue = typeFilter.value.toLowerCase();
+
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName("td");
+                    if (cells.length > 0) {
+                        const nameText = cells[0].textContent.toLowerCase();
+                        const eventText = cells[1].textContent.toLowerCase();
+                        const rankText = cells[2].textContent.toLowerCase();
+                        const typeText = cells[3].textContent.toLowerCase();
+
+                        if (
+                            (nameText.includes(nameValue) || nameValue === "") &&
+                            (eventText.includes(eventValue) || eventValue === "") &&
+                            (rankText.includes(rankValue) || rankValue === "") &&
+                            (typeText.includes(typeValue) || typeValue === "")
+                        ) {
+                            rows[i].style.display = "";
+                        } else {
+                            rows[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+
+            nameFilter.addEventListener("input", filterTable);
+            eventFilter.addEventListener("input", filterTable);
+            rankFilter.addEventListener("input", filterTable);
+            typeFilter.addEventListener("input", filterTable);
+        });
+    </script>
+
+</body>
+</html>

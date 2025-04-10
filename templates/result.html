@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Details</title>
+    <style>
+        /* Background with Image */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url("/static/background.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Bar for Logo & Logout */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+            z-index: 1000;
+        }
+
+        /* Logo */
+        .logo {
+            width: 200px;  /* Increased size */
+            height: auto;
+        }
+
+        /* Logout Button */
+        .logout-button {
+            background-color: #B50346;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #900235;
+            transform: scale(1.05);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            width: 90%;
+            background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent */
+            border-radius: 10px;
+            padding: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            margin-top: 140px; /* Adjusted for logo space */
+        }
+
+        /* Header */
+        h2 {
+            color: #ffffff;
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            color: #ffffff;
+            font-weight: bold;
+            display: block;
+            font-size: 18px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            background-color: #2a2d34;
+            border: 2px solid #B50346;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus {
+            outline: 2px solid #B50346;
+            outline-offset: 2px;
+        }
+
+        p {
+            margin: 12px 0;
+            padding: 14px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            font-size: 18px;
+        }
+
+        strong {
+            color: #B50346;
+        }
+
+        /* Confirm Button */
+        button {
+            padding: 14px 25px;
+            background-color: #B50346;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #900235;
+            transform: scale(1.05);
+        }
+
+        /* Upload Another Certificate Link */
+        .button-link {
+            display: inline-block;
+            padding: 14px 25px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #B50346;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .button-link:hover {
+            background-color: #B50346;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar for Logo & Logout -->
+    <div class="top-bar">
+        <img src="/static/logo.png" alt="Logo" class="logo">
+        {% if session.user %}
+        <form action="/logout" method="post">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <!-- Certificate Details Container -->
+    <div class="container">
+        <h2>Extracted Certificate Details</h2>
+
+        <form action="/confirm" method="post">
+            <label><strong>Name:</strong></label>
+            <input type="text" name="name" value="{{ data.Name }}" required>
+
+            <p><strong>Event:</strong> {{ data.Event }}</p>
+            <p><strong>Rank/Position:</strong> {{ data["Rank/Position"] }}</p>
+            <p><strong>Type:</strong> {{ data.Type }}</p>
+
+            <input type="hidden" name="event" value="{{ data.Event }}">
+            <input type="hidden" name="rank" value="{{ data['Rank/Position'] }}">
+            <input type="hidden" name="type" value="{{ data.Type }}">
+
+            <button type="submit">Confirm Certificate</button>
+        </form>
+
+        <a href="/" class="button-link">Upload Another Certificate</a>
+    </div>
+
+</body>
+</html>
